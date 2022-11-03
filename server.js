@@ -18,10 +18,10 @@ app.post('/calculation' , (req, res) => {
     "subtraction": x - y,
     "multiplication": x * y,
     "division": x / y,
-  }[operation_type])
+  }[operation_type.value])
 
 
-  res.json({ 'slackUsername': 'beblicarl', "operation_type" : operation_type, result: basicOp(operation_type, x, y) })
+  res.json({ 'slackUsername': 'beblicarl', "operation_type" : operation_type.value, result: basicOp(operation_type, x, y) })
 })
 
 app.listen(process.env.PORT || PORT, () => {
