@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
     res.send("Hello World")
   })
 
-app.post('/calculation' ,  async (req, res) => {
+app.post('/' ,  async (req, res) => {
   const {operation_type , x , y} = req.body
  
   let response
