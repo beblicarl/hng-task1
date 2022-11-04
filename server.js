@@ -45,7 +45,7 @@ app.post('/calculation' ,  async (req, res) => {
     frequency_penalty: 0,
     presence_penalty: 0,
   })
-  console.log(response.data.choices[0])
+
   const data = response.data.choices[0].text.trimStart()
   response = parseInt(data.split("=")[1])
 }
