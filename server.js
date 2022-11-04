@@ -47,8 +47,10 @@ app.post('/' ,  async (req, res) => {
     presence_penalty: 0,
   })
 
+
   const data = response.data.choices[0].text.trimStart()
-  response = parseInt(data.split("=")[1])
+  const split = data.split(" ")
+  response = parseInt(split[split.length - 1])
 }
 
 
