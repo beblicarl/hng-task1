@@ -30,9 +30,8 @@ app.post('/calculation' ,  async (req, res) => {
         ({
           "addition": x + y,
           "subtraction": x - y,
-          "multiplication": x * y,
-          "division": x / y,
-        }[operation_type.value])
+          "multiplication": x * y
+        }[operation_type])
 
   response = basicOp(operation_type, x, y)
   }
@@ -46,12 +45,13 @@ app.post('/calculation' ,  async (req, res) => {
     frequency_penalty: 0,
     presence_penalty: 0,
   })
+  console.log(response.data.choices[0])
   const data = response.data.choices[0].text.trimStart()
   response = parseInt(data.split("=")[1])
 }
 
 
-  res.status(201).json({ 'slackUsername': 'beblicarl' , "operation_type" : operation_type?.value , result : response})
+  res.status(201).json({ 'slackUsername': 'beblicarl' , "operation_type" : operation_type , result : response})
 })
 
 app.listen(process.env.PORT || PORT, () => {
