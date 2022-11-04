@@ -47,10 +47,11 @@ app.post('/' ,  async (req, res) => {
     presence_penalty: 0,
   })
 
-
+  console.log(response.data)
   const data = response.data.choices[0].text.trimStart()
   const split = data.split(" ")
   response = parseInt(split[split.length - 1])
+  operation_type = "addition"
 }
 
 
