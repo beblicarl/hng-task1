@@ -51,7 +51,7 @@ app.post('/' ,  async (req, res) => {
 }
 
 
-  res.status(201).json({ 'slackUsername': 'beblicarl' , "operation_type" : operation_type , result : response})
+  res.status(200).json({ 'slackUsername': 'beblicarl' , "operation_type" : operation_type , result : response})
 })
 
 app.listen(process.env.PORT || PORT, () => {
