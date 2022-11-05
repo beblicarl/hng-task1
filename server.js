@@ -4,11 +4,17 @@ const cors = require('cors')
 require('dotenv').config()
 const PORT = 3000
 
+const {
+  nonOpenAiSchema,
+    openAiSchema,
+    validate
+} = require('./schema')
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 const { Configuration, OpenAIApi } = require("openai");
+
 
 
 const configuration = new Configuration({
@@ -21,23 +27,57 @@ app.get('/', (req, res) => {
     res.send("Hello World")
   })
 
+/* 
+Non-openai
+1. Operation_type field is required 404
+2. X field is required 404
+3. Y field is required 404
+4. Operation_type should be a valid string (addition, subtraction, multiplication) 400
+5. X should be a number 400
+6. Y should be a number 400
+
+Openai
+1. Operation_type field is required 404
+2. X field is not needed 
+3. Y field is not needed 
+4. Operation_type field should be a string 400
+*/
+
+/*
+
+*/ 
+
 app.post('/' ,  async (req, res) => {
+
   let {operation_type , x , y} = req.body
  
   let response
   
-  if( x && y ){
-    const basicOp = (operation_type, x, y) =>
-        ({
-          "addition": x + y,
-          "add" : x + y,
-          "sum" : x + y,
-          "subtraction": x - y,
-          "minus": x -y,
-          "multiplication": x * y
-        }[operation_type])
+  if ( x && y ){
+ 
+     const {value, error} = validate(nonOpenAiSchema, {operation_type, x, y})
+     if(error){
+      console.log(error)
+      return res.status(400).json({
+        error
+      })
+     }
 
-  response = basicOp(operation_type, x, y)
+      
+    
+    
+  //       const basicOp = (operation_type, x, y) =>
+  //       ({
+  //         "addition": x + y,
+  //         "add" : x + y,
+  //         "sum" : x + y,
+  //         "subtraction": x - y,
+  //         "minus": x -y,
+  //         "multiplication": x * y
+  //       }[operation_type])
+
+  // response = basicOp(operation_type, x, y)
+     
   }
   else {
     
