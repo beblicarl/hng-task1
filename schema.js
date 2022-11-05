@@ -1,23 +1,19 @@
 const Joi = require('joi')
 
-const nonOpenAiSchema = Joi.object({
-
-        operation_type : Joi.string()
-                .required()
-                .valid('addition', 'subtraction', 'multiplication'),
-        x : Joi.number()
-            .required(),
-        y : Joi.number()
-            .required()
+const validationSchema = Joi.object({
+    operation_type : Joi.string().required(),
+    x : Joi.number(),
+    y : Joi.number()
 
 })
-
-const openAiSchema = Joi.object({
-
-        operation_type : Joi.string()
-                .required()
-            
+.when(
+    Joi.object({ x: Joi.exist(), y: Joi.exist() }), {
+    then: Joi.object({
+        operation_type: Joi.string().valid('addition', 'subtraction', 'multiplication')
+    })
 })
+.with('x','y')
+
 
 
 const validate = (schema, data) => {
@@ -26,11 +22,10 @@ const validate = (schema, data) => {
 		allowUnknown: true, // allow unknown keys that will be ignored
 		stripUnknown: true // remove unknown keys from the validated data
 	}
-   return schema.validateAsync(data, validationOptions)
+  return schema.validate(data, validationOptions)
 } 
 
 module.exports = {
     validate,
-    nonOpenAiSchema,
-    openAiSchema
+    validationSchema
 }
