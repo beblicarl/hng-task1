@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
   })
 
 app.post('/' ,  async (req, res) => {
-  const {operation_type , x , y} = req.body
+  let {operation_type , x , y} = req.body
  
   let response
   
@@ -30,13 +30,18 @@ app.post('/' ,  async (req, res) => {
     const basicOp = (operation_type, x, y) =>
         ({
           "addition": x + y,
+          "add" : x + y,
+          "sum" : x + y,
           "subtraction": x - y,
+          "minus": x -y,
           "multiplication": x * y
         }[operation_type])
 
   response = basicOp(operation_type, x, y)
   }
   else {
+    
+  
   response = await openai.createCompletion({
     model: "text-davinci-002",
     prompt: operation_type,
@@ -47,7 +52,20 @@ app.post('/' ,  async (req, res) => {
     presence_penalty: 0,
   })
 
-  console.log(response.data)
+  if (/add/.test(operation_type)) {
+    operation_type = "addition"
+    }
+  else if (/subtract/.test(operation_type)) {
+    operation_type = "subtraction"
+    } 
+  else if (/multiply/.test(operation_type)) {
+    operation_type = "multiplication"
+    }
+   else {
+    "invalid operation_type"
+   }
+ 
+
   const data = response.data.choices[0].text.trimStart()
   const split = data.split(" ")
   response = parseInt(split[split.length - 1])
